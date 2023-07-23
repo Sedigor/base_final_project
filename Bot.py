@@ -1,7 +1,21 @@
 from AddressBook import *
+from abc import ABC, abstractmethod
+
+class UserInterface(ABC):
+    @abstractmethod
+    def display_contacts(self, contacts):
+        pass
+    
+    @abstractmethod
+    def display_congratulates(self, notes):
+        pass
+    
+    @abstractmethod
+    def display_help(self, commands):
+        pass
 
 
-class Bot:
+class Bot(UserInterface):
     def __init__(self):
         self.book = AddressBook()
 
@@ -40,10 +54,22 @@ class Bot:
             file_name = input("File name: ")
             return self.book.load(file_name)
         elif action == 'congratulate':
-            print(self.book.congratulate())
+            self.display_congratulates()
         elif action == 'view':
-            print(self.book)
+            self.display_contacts()
         elif action == 'exit':
             pass
         else:
             print("There is no such command!")
+    
+    def display_contacts(self):
+        print(self.book)
+    
+    def display_congratulates(self):
+        print(self.book.congratulate())
+    
+    def display_help(self):
+        commands = ['Add', 'Search', 'Edit', 'Load', 'Remove', 'Save', 'Congratulate', 'View', 'Exit']
+        format_str = str('{:%s%d}' % ('^',20))
+        for command in commands:
+            print(format_str.format(command))
